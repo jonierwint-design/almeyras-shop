@@ -1,0 +1,17 @@
+{
+  "name": "Almeyra's Shop",
+  "short_name": "Almeyra",
+  "description": "Pencatatan penjualan souvenir dan laporan mingguan/bulanan",
+  "lang": "id",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fbf5f2",
+  "theme_color": "#b5456b",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

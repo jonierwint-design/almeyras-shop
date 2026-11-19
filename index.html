@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Almeyra's Shop</title>
+<meta name="theme-color" content="#b5456b">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Almeyra's Shop">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<style>
+:root{
+  color-scheme: light;
+  --bg:#fbf5f2; --card:#ffffff; --ink:#2d2326; --muted:#6f5f63; --line:#ecdcd5;
+  --rose:#b5456b; --rose-d:#963457; --rose-soft:#fbe9ef; --gold:#c98a2b; --gold-soft:#fbf0dc;
+  --ok:#2f7d57; --err:#b3261e; --err-soft:#fdecea;
+  --radius:16px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.5}
+.app{max-width:900px;margin:0 auto;padding:20px 16px 56px}
+header.top{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.logo{width:56px;height:56px;border-radius:16px;object-fit:cover;border:3px solid #fff;box-shadow:0 2px 10px rgba(120,60,70,.18);flex:none}
+header.top h1{margin:0;font-size:24px;line-height:1.15;font-weight:800;letter-spacing:-.2px;color:var(--rose)}
+header.top p{margin:2px 0 0;color:var(--muted);font-size:14px;font-weight:600}
+
+.tabs{display:flex;gap:4px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:4px;margin-bottom:16px}
+.tabs button{flex:1;border:0;background:transparent;font:inherit;font-weight:700;font-size:15px;color:var(--muted);padding:10px 8px;border-radius:10px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--rose);color:#fff}
+.tabs button:not([aria-selected="true"]):hover{background:var(--rose-soft);color:var(--rose-d)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid rgba(181,69,107,.35);outline-offset:1px}
+
+.banner{border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:14px;font-weight:600;background:var(--gold-soft);color:#6b4a0f;border:1px solid #efd9a8}
+.banner.err{background:var(--err-soft);color:var(--err);border-color:#f3c3be}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:16px;box-shadow:0 1px 3px rgba(120,60,70,.06)}
+.card h2{margin:0 0 14px;font-size:18px;font-weight:800}
+.card h3{margin:18px 0 8px;font-size:15px;font-weight:800;color:var(--rose-d)}
+.muted{color:var(--muted)}
+.note13{font-size:13px;margin:10px 0 0}
+.mb8{margin-bottom:8px}
+[hidden]{display:none!important}
+
+.grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:620px){.grid{grid-template-columns:1fr 1fr}.grid .full{grid-column:1/-1}}
+label{display:block;font-weight:700;font-size:14px;margin-bottom:5px}
+input[type=text],input[type=date],input[type=month]{width:100%;height:46px;padding:0 12px;border:1.5px solid var(--line);border-radius:10px;font:inherit;background:#fff;color:var(--ink)}
+input:focus{border-color:var(--rose)}
+input[aria-invalid="true"]{border-color:var(--err);background:#fffafa}
+.err{color:var(--err);font-size:13px;font-weight:700;margin-top:4px;min-height:0}
+.hint{color:#8a5a00;font-size:13px;font-weight:600;margin-top:4px}
+.inline-unit{position:relative}
+.inline-unit .u{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-weight:700;pointer-events:none}
+.inline-unit input{padding-left:42px}
+
+.totalbox{display:flex;justify-content:space-between;align-items:center;background:var(--gold-soft);border:1px solid #efd9a8;border-radius:12px;padding:12px 14px}
+.totalbox span{font-weight:700;color:#6b4a0f}
+.totalbox strong{font-size:22px;font-weight:800;color:#6b4a0f;font-variant-numeric:tabular-nums}
+
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.btn{height:46px;padding:0 20px;border-radius:12px;border:1.5px solid var(--rose);background:var(--rose);color:#fff;font:inherit;font-weight:800;font-size:15px;cursor:pointer}
+.btn:hover:not(:disabled){background:var(--rose-d);border-color:var(--rose-d)}
+.btn.secondary{background:#fff;color:var(--rose-d)}
+.btn.secondary:hover:not(:disabled){background:var(--rose-soft);border-color:var(--rose)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.btn.small{height:34px;padding:0 12px;font-size:13px;border-radius:9px}
+.btn.danger{background:var(--err);border-color:var(--err)}
+.btn.danger:hover:not(:disabled){background:#8f1e17;border-color:#8f1e17}
+
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:4px 0 6px}
+@media(min-width:620px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stat{background:var(--rose-soft);border-radius:12px;padding:12px}
+.stat .k{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.3px}
+.stat .v{font-size:19px;font-weight:800;color:var(--rose-d);font-variant-numeric:tabular-nums;word-break:break-word}
+.stat.main{background:var(--rose);}
+.stat.main .k{color:#fde7ee}.stat.main .v{color:#fff}
+
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th{background:var(--rose-soft);color:var(--rose-d);text-align:left;font-weight:800;padding:9px 10px;white-space:nowrap}
+td{padding:9px 10px;border-top:1px solid var(--line);vertical-align:top}
+th.r,td.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tfoot td{background:var(--gold-soft);font-weight:800;border-top:1px solid #efd9a8}
+td.nowrap{white-space:nowrap}
+.txlist{display:flex;flex-direction:column;gap:10px}
+.tx{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fff}
+.tx.editing{border-color:var(--rose);background:var(--rose-soft)}
+.tx-main{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.tx-title{font-weight:800;word-break:break-word}
+.tx-total{font-weight:800;color:var(--rose-d);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tx-sub{color:var(--muted);font-size:14px;font-weight:600;margin:2px 0 10px;word-break:break-word}
+.row-actions{display:flex;gap:6px;flex-wrap:nowrap;align-items:center}
+.confirm{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:13px;font-weight:700;color:var(--err)}
+.empty{padding:22px 12px;text-align:center;color:var(--muted);font-weight:600}
+
+.filters{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:12px}
+@media(min-width:620px){.filters{grid-template-columns:1fr 1fr}}
+.check{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;margin-top:6px}
+.check input{width:18px;height:18px;accent-color:var(--rose)}
+.sumline{font-weight:700;margin:2px 0 10px;color:var(--muted);font-size:14px}
+.sumline b{color:var(--ink)}
+
+.seg{display:flex;gap:4px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:4px;margin-bottom:14px}
+.seg button{flex:1;border:0;background:transparent;font:inherit;font-weight:700;font-size:14px;color:var(--muted);padding:9px 6px;border-radius:9px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:#fff;color:var(--rose-d);box-shadow:0 1px 3px rgba(120,60,70,.15)}
+.weekrow{display:flex;gap:8px;align-items:flex-end}
+.weekrow .fld{flex:1}
+.weekrow .btn{flex:none}
+.periodlabel{font-weight:800;font-size:16px;margin:14px 0 10px}
+
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 16px;border-radius:12px;font-weight:700;font-size:14px;max-width:calc(100% - 32px);z-index:10;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+#toast.err{background:var(--err)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+header.top .btn{margin-left:auto}
+.bk-actions{display:flex;gap:10px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <img class="logo" alt="Logo Almeyra's Shop" src="icons/icon-192.png" width="56" height="56">
+    <div>
+      <h1>Almeyra's Shop</h1>
+      <p>Pencatatan penjualan souvenir</p>
+    </div>
+    <button type="button" class="btn small" id="btnInstall" hidden>Pasang aplikasi</button>
+  </header>
+
+  <div id="banner" class="banner" role="status" hidden></div>
+
+  <nav class="tabs" role="tablist" aria-label="Menu utama">
+    <button role="tab" id="t-catat" aria-selected="true" aria-controls="p-catat">Catat</button>
+    <button role="tab" id="t-riwayat" aria-selected="false" aria-controls="p-riwayat">Riwayat</button>
+    <button role="tab" id="t-laporan" aria-selected="false" aria-controls="p-laporan">Laporan</button>
+  </nav>
+
+  <main>
+    <!-- ===== CATAT ===== -->
+    <section id="p-catat" role="tabpanel" aria-labelledby="t-catat">
+      <form id="form" class="card" novalidate autocomplete="off">
+        <h2 id="formTitle">Catat Penjualan</h2>
+        <div class="grid">
+          <div>
+            <label for="fTgl">Tanggal penjualan</label>
+            <input type="date" id="fTgl" min="2000-01-01" max="2100-12-31" aria-describedby="eTgl">
+            <div class="err" id="eTgl"></div>
+            <div class="hint" id="hTgl" hidden>Tanggal ini di masa depan. Pastikan sudah benar.</div>
+          </div>
+          <div>
+            <label for="fPembeli">Nama pembeli</label>
+            <input type="text" id="fPembeli" maxlength="80" list="dlBuyers" placeholder="Contoh: Siti Rahma" aria-describedby="ePembeli">
+            <div class="err" id="ePembeli"></div>
+          </div>
+          <div class="full">
+            <label for="fBarang">Jenis barang</label>
+            <input type="text" id="fBarang" maxlength="80" list="dlItems" placeholder="Contoh: Gantungan kunci" aria-describedby="eBarang">
+            <div class="err" id="eBarang"></div>
+          </div>
+          <div>
+            <label for="fJumlah">Jumlah barang</label>
+            <input type="text" id="fJumlah" inputmode="numeric" placeholder="0" aria-describedby="eJumlah">
+            <div class="err" id="eJumlah"></div>
+          </div>
+          <div>
+            <label for="fHarga">Harga per satuan</label>
+            <div class="inline-unit"><span class="u">Rp</span><input type="text" id="fHarga" inputmode="numeric" placeholder="0" aria-describedby="eHarga"></div>
+            <div class="err" id="eHarga"></div>
+          </div>
+          <div class="full">
+            <div class="totalbox" aria-live="polite"><span>Total transaksi</span><strong id="fTotal">Rp 0</strong></div>
+          </div>
+        </div>
+        <datalist id="dlBuyers"></datalist>
+        <datalist id="dlItems"></datalist>
+        <div class="actions">
+          <button type="submit" class="btn" id="btnSave">Simpan transaksi</button>
+          <button type="button" class="btn secondary" id="btnCancel" hidden>Batal ubah</button>
+        </div>
+      </form>
+
+      <div class="card">
+        <h2 id="dayTitle">Transaksi pada tanggal ini</h2>
+        <div id="daySummary" class="sumline"></div>
+        <div id="dayList"></div>
+      </div>
+    </section>
+
+    <!-- ===== RIWAYAT ===== -->
+    <section id="p-riwayat" role="tabpanel" aria-labelledby="t-riwayat" hidden>
+      <div class="card">
+        <h2>Riwayat Transaksi</h2>
+        <div class="filters">
+          <div>
+            <label for="hMonth">Bulan</label>
+            <input type="month" id="hMonth">
+            <label class="check"><input type="checkbox" id="hAll"> Tampilkan semua periode</label>
+          </div>
+          <div>
+            <label for="hQuery">Cari pembeli atau barang</label>
+            <input type="text" id="hQuery" placeholder="Ketik nama pembeli atau barang" maxlength="80">
+          </div>
+        </div>
+        <div id="hSummary" class="sumline"></div>
+        <div id="hList"></div>
+      </div>
+      <div class="card">
+        <h2>Cadangan Data</h2>
+        <p class="muted note13">Data disimpan di perangkat ini. Cadangkan secara berkala supaya tidak hilang bila data browser dibersihkan atau ponsel diganti.</p>
+        <div id="bkStatus" class="sumline"></div>
+        <div class="bk-actions">
+          <button type="button" class="btn" id="btnBackup">Unduh cadangan (.json)</button>
+          <button type="button" class="btn secondary" id="btnRestore">Pulihkan dari cadangan</button>
+          <input type="file" id="fRestore" accept=".json,application/json" hidden>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== LAPORAN ===== -->
+    <section id="p-laporan" role="tabpanel" aria-labelledby="t-laporan" hidden>
+      <div class="card">
+        <h2>Laporan Penjualan</h2>
+        <div class="seg" role="group" aria-label="Jenis laporan">
+          <button type="button" id="m-mingguan" aria-pressed="true">Mingguan</button>
+          <button type="button" id="m-bulanan" aria-pressed="false">Bulanan</button>
+          <button type="button" id="m-rentang" aria-pressed="false">Rentang tanggal</button>
+        </div>
+
+        <div id="c-mingguan">
+          <div class="weekrow">
+            <button type="button" class="btn secondary" id="wPrev" aria-label="Minggu sebelumnya">&larr;</button>
+            <div class="fld">
+              <label for="rWeek">Pilih tanggal (laporan mencakup Senin&ndash;Minggu pada tanggal itu)</label>
+              <input type="date" id="rWeek" min="2000-01-01" max="2100-12-31">
+            </div>
+            <button type="button" class="btn secondary" id="wNext" aria-label="Minggu berikutnya">&rarr;</button>
+          </div>
+        </div>
+        <div id="c-bulanan" hidden>
+          <label for="rMonth">Pilih bulan</label>
+          <input type="month" id="rMonth">
+        </div>
+        <div id="c-rentang" hidden>
+          <div class="grid">
+            <div><label for="rFrom">Dari tanggal</label><input type="date" id="rFrom" min="2000-01-01" max="2100-12-31"></div>
+            <div><label for="rTo">Sampai tanggal</label><input type="date" id="rTo" min="2000-01-01" max="2100-12-31"></div>
+          </div>
+        </div>
+        <div class="err" id="rErr"></div>
+
+        <div id="preview"></div>
+
+        <div class="actions">
+          <button type="button" class="btn" id="btnDownload" disabled>Unduh Laporan Word (.docx)</button>
+          <button type="button" class="btn secondary" id="btnShare" hidden disabled>Bagikan</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+<div id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="jszip.min.js"></script>
+<script src="report.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

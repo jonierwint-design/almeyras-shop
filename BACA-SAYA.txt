@@ -1,0 +1,13 @@
+ALMEYRA'S SHOP - aplikasi pencatatan penjualan souvenir (PWA)
+
+Isi paket ini adalah satu situs web statis. Agar bisa dipasang di Android, isi folder ini
+harus diunggah ke hosting yang memakai HTTPS (mis. GitHub Pages).
+Membuka index.html langsung dari berkas TIDAK dapat dipasang sebagai aplikasi.
+
+Memasang di Android (setelah dihosting):
+1. Buka tautan situs di Chrome.
+2. Ketuk tombol "Pasang aplikasi" di pojok kanan atas, atau menu titik tiga > "Instal aplikasi".
+3. Ikon Almeyra's Shop muncul di layar utama dan bisa dipakai tanpa internet.
+
+Berkas: index.html, app.js, report.js, jszip.min.js, sw.js, manifest.webmanifest, folder icons/.
+Bila isi berkas diubah, naikkan nomor VERSI di sw.js (mis. almeyras-shop-v2).
